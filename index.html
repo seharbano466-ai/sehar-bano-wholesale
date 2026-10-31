@@ -292,7 +292,7 @@ body{overflow-x:hidden;background:#fbf8f4;perspective:1200px}
 <footer><div class="brand">SEHAR BANO</div><p>WHOLESALE · PREMIUM PAKISTANI FASHION</p><p>Wholesale prices and availability are confirmed on enquiry.</p><p>© <span id="year"></span> Sehar Bano. All rights reserved.</p></footer>
 <a class="whatsapp-float" id="floatingWhatsApp" href="#contact">WhatsApp Wholesale</a>
 
-<div class="product-modal" id="productModal" hidden role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
+<div class="product-modal" id="productModal" hidden style="display:none" role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
   <div class="product-modal-panel">
     <button class="product-modal-close" type="button" aria-label="Close product details" onclick="closeProductDetails()">×</button>
     <div class="product-modal-image" id="productModalImage"></div>
@@ -463,8 +463,8 @@ async function loadWholesaleProducts() {
           <div class="product-price">${price}</div>
           <p>${escapeHtml(description)}</p>
           <div class="product-actions">
-            <button class="btn btn-outline" type="button" onclick="openProductDetails(${index})">View Details</button>
-            <button class="btn" type="button" onclick="enquireProductByIndex(${index})">WhatsApp Enquiry</button>
+            <button class="btn btn-outline" type="button" data-product-details="${index}">View Details</button>
+            <button class="btn" type="button" data-product-enquiry="${index}">WhatsApp Enquiry</button>
           </div>
         </div>
       </article>`;
@@ -527,6 +527,7 @@ function openProductDetails(index) {
     window.open(whatsappLink(message), "_blank", "noopener");
   };
   modal.hidden = false;
+  modal.style.display = "flex";
   document.body.style.overflow = "hidden";
 }
 function showProductGalleryItem(index) {
@@ -544,9 +545,29 @@ function toggleProductSizeGuide(){
   const panel=document.getElementById("productSizeGuidePanel");
   if(panel) panel.classList.toggle("open");
 }
+// Explicit global exports keep product actions reliable on GitHub Pages.
+window.openProductDetails = openProductDetails;
+window.closeProductDetails = closeProductDetails;
+window.showProductGalleryItem = showProductGalleryItem;
+window.toggleProductSizeGuide = toggleProductSizeGuide;
+window.enquireProductByIndex = enquireProductByIndex;
+document.addEventListener("click", function(event) {
+  const detailsButton = event.target.closest("[data-product-details]");
+  if (detailsButton) {
+    event.preventDefault();
+    const index = Number(detailsButton.getAttribute("data-product-details"));
+    openProductDetails(index);
+    return;
+  }
+  const enquiryButton = event.target.closest("[data-product-enquiry]");
+  if (enquiryButton) {
+    event.preventDefault();
+    enquireProductByIndex(Number(enquiryButton.getAttribute("data-product-enquiry")));
+  }
+});
 function closeProductDetails() {
   const modal = document.getElementById("productModal");
-  if (modal) modal.hidden = true;
+  if (modal) { modal.hidden = true; modal.style.display = "none"; }
   document.body.style.overflow = "";
 }
 document.addEventListener("keydown", event => {
