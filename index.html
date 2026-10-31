@@ -184,6 +184,47 @@ body{overflow-x:hidden;background:#fbf8f4;perspective:1200px}
 @media(max-width:760px){.sb-showcase:before{display:none}.editorial-photo,.product,.reel-card{transform:none!important}.product-image img{transform:none!important}.product:hover .product-image img{transform:scale(1.025)!important}}
 @media(prefers-reduced-motion:reduce){.sb-slide img,.editorial-photo,.product,.reel-card,.reveal{transition:none!important;transform:none!important}}
 
+
+/* Product price, details and enquiry experience */
+.product-price{font:600 15px/1.4 Arial,sans-serif;color:var(--wine);margin:0 0 13px}
+.product-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.product-actions .btn{width:100%;min-height:44px;padding:12px 8px;font-size:10px}
+.product-actions .btn-outline{background:transparent;color:var(--wine);border:1px solid var(--wine)}
+.product-actions .btn-outline:hover{background:var(--wine);color:#fff}
+.product-info p{min-height:38px}
+.product-modal[hidden]{display:none!important}
+.product-modal{position:fixed;inset:0;z-index:1000;background:rgba(22,13,16,.72);display:flex;align-items:center;justify-content:center;padding:22px;backdrop-filter:blur(8px)}
+.product-modal-panel{position:relative;width:min(900px,100%);max-height:90vh;overflow:auto;background:#fbf7f1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);box-shadow:0 25px 90px #0005}
+.product-modal-image{background:#eee5dc;min-height:520px;padding:14px;display:flex;flex-direction:column;gap:10px;align-self:stretch}
+.product-gallery-main{width:100%;height:430px;background:#f4eee7;display:grid;place-items:center;overflow:hidden}
+.product-gallery-main img,.product-gallery-main video{width:100%;height:100%;object-fit:contain;display:block}
+.product-gallery-thumbs{display:flex;gap:8px;overflow-x:auto;padding:2px 1px 7px}
+.product-gallery-thumb{width:68px;height:78px;flex:0 0 68px;border:1px solid #d8cabb;background:#fff;padding:2px;cursor:pointer;position:relative}
+.product-gallery-thumb.active{border:2px solid var(--gold)}
+.product-gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.product-gallery-thumb.video-thumb:after{content:'▶ VIDEO';position:absolute;inset:auto 2px 5px;background:#421b2b;color:#fff;font-size:8px;text-align:center;padding:3px}
+.product-price-size-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:8px 0 18px;flex-wrap:wrap}
+.product-size-guide-toggle{border:1px solid #b89a63;background:transparent;color:var(--wine);padding:9px 12px;font-size:10px;letter-spacing:.5px;cursor:pointer}
+.product-size-guide-panel{display:none;background:#f1e8dd;border:1px solid #e0d2c1;padding:13px;margin:-7px 0 16px;font-size:11px;line-height:1.7;color:#5d4a4e}
+.product-size-guide-panel.open{display:block}
+.product-detail-description{border-top:1px solid #e2d7cb;margin-top:24px;padding-top:18px}
+.product-detail-description .product-modal-kicker{display:block;margin-bottom:8px}
+.product-detail-description p{margin:0}
+.product-modal-content{align-self:start}
+.product-modal-content{padding:clamp(22px,4vw,46px);align-self:center}
+.product-modal-close{position:absolute;right:13px;top:13px;z-index:2;width:38px;height:38px;border:0;border-radius:50%;background:#fff;color:var(--wine);font-size:23px;cursor:pointer}
+.product-modal-kicker{font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+.product-modal-content h2{font:normal clamp(25px,3vw,36px)/1.2 Georgia,serif;color:var(--wine);margin:12px 0}
+.product-modal-price{font-size:19px;font-weight:700;color:var(--wine);margin:0 0 18px}
+.product-modal-description{font-size:12px;line-height:1.9;color:var(--muted);white-space:pre-line}
+.product-variant-list{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0 20px}
+.product-variant-chip{border:1px solid #d8cabb;background:#fff;padding:9px 13px;font-size:11px;color:var(--wine)}
+.product-quantity{display:flex;align-items:center;gap:12px;margin:16px 0}
+.product-quantity input{width:75px;padding:10px;border:1px solid #d8cabb;background:#fff}
+.product-modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.product-modal-actions .btn{flex:1;min-width:140px;text-align:center}
+@media(max-width:650px){.product-modal{padding:10px;align-items:flex-start}.product-modal-panel{grid-template-columns:1fr;max-width:480px;max-height:94vh}.product-modal-image{min-height:0;padding:9px}.product-gallery-main{height:auto;max-height:42vh;aspect-ratio:4/3}.product-modal-content{padding:18px}.product-actions{grid-template-columns:1fr}.product-info p{min-height:0}}
+
 </style>
 </head>
 <body>
@@ -250,6 +291,27 @@ body{overflow-x:hidden;background:#fbf8f4;perspective:1200px}
 </main>
 <footer><div class="brand">SEHAR BANO</div><p>WHOLESALE · PREMIUM PAKISTANI FASHION</p><p>Wholesale prices and availability are confirmed on enquiry.</p><p>© <span id="year"></span> Sehar Bano. All rights reserved.</p></footer>
 <a class="whatsapp-float" id="floatingWhatsApp" href="#contact">WhatsApp Wholesale</a>
+
+<div class="product-modal" id="productModal" hidden role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
+  <div class="product-modal-panel">
+    <button class="product-modal-close" type="button" aria-label="Close product details" onclick="closeProductDetails()">×</button>
+    <div class="product-modal-image" id="productModalImage"></div>
+    <div class="product-modal-content">
+      <span class="product-modal-kicker">Sehar Bano · Wholesale</span>
+      <h2 id="productModalTitle"></h2>
+      <div class="product-price-size-row"><div class="product-modal-price" id="productModalPrice"></div><button class="product-size-guide-toggle" type="button" onclick="toggleProductSizeGuide()">SIZE GUIDE +</button></div>
+      <div class="product-size-guide-panel" id="productSizeGuidePanel">Available sizes for this design are listed below. Size availability and exact garment measurements can vary by design. Please confirm your required size with our wholesale team before placing a bulk order.</div>
+      <div id="productModalVariants"></div>
+      <label class="product-quantity">Required quantity <input id="productModalQty" type="number" min="1" value="1"></label>
+      <div class="product-modal-actions">
+        <button class="btn" id="productModalEnquire" type="button">Enquire on WhatsApp</button>
+        <a class="btn btn-outline" id="productModalShopify" href="#" target="_blank" rel="noopener">Open Shopify Product</a>
+      </div>
+      <div class="product-detail-description"><span class="product-modal-kicker">Product Description</span><p class="product-modal-description" id="productModalDescription"></p></div>
+    </div>
+  </div>
+</div>
+
 <script>
 /* Storefront API: public token is intended for browser use. Never put a private/Admin token here. */
 const SHOP_DOMAIN = "n21ryw-fg.myshopify.com";
@@ -270,8 +332,8 @@ document.getElementById("floatingWhatsApp").href = whatsappLink("Assalam-o-Alaik
 document.getElementById("year").textContent = new Date().getFullYear();
 
 function formatShopifyPrice(product) {
-  const money = product?.priceRange?.minVariantPrice;
-  if (!money || !money.amount) return "Price on enquiry";
+  const money = product?.priceRange?.minVariantPrice || product?.variants?.nodes?.[0]?.price;
+  if (!money || money.amount == null || money.amount === "") return "Price on enquiry";
   try { return new Intl.NumberFormat("en-PK", {style:"currency", currency:money.currencyCode || "PKR", maximumFractionDigits:0}).format(Number(money.amount)); }
   catch (_) { return (money.currencyCode || "PKR") + " " + money.amount; }
 }
@@ -337,6 +399,15 @@ async function loadWholesaleProducts() {
           description
           availableForSale
           priceRange { minVariantPrice { amount currencyCode } }
+          variants(first: 30) {
+            nodes {
+              id
+              title
+              availableForSale
+              price { amount currencyCode }
+              selectedOptions { name value }
+            }
+          }
           media(first: 12) {
             nodes {
               mediaContentType
@@ -348,7 +419,7 @@ async function loadWholesaleProducts() {
             }
           }
           featuredImage { url altText }
-          images(first: 1) { nodes { url altText } }
+          images(first: 20) { nodes { url altText } }
         }
       }
     }
@@ -377,16 +448,25 @@ async function loadWholesaleProducts() {
       grid.innerHTML = '<div class="state-box" style="grid-column:1/-1"><strong>Wholesale collection is ready</strong>No products have been added yet. Add products to the “Whole Sale” collection in Shopify and they will appear here once available to the Online Store / Storefront API.</div>';
       return;
     }
-    grid.innerHTML = products.map(product => {
+    window.seharBanoProducts = products;
+    grid.innerHTML = products.map((product, index) => {
       const image = product.featuredImage || product.images?.nodes?.[0];
       const imageMarkup = image?.url
         ? `<img src="${escapeAttribute(image.url)}" alt="${escapeAttribute(image.altText || product.title)}" loading="lazy">`
         : "";
-      const productUrl = `https://${SHOP_DOMAIN}/products/${encodeURIComponent(product.handle)}`;
       const description = product.description ? stripHtml(product.description).slice(0, 115) : "Premium Sehar Bano design available for wholesale enquiry.";
+      const price = escapeHtml(formatShopifyPrice(product));
       return `<article class="product">
         <div class="product-image">${imageMarkup}</div>
-        <div class="product-info"><h3>${escapeHtml(product.title)}</h3><p>${escapeHtml(description)}</p><button class="btn" type="button" onclick="enquireProduct(${JSON.stringify(product.title).replace(/</g, "\\u003c")}, ${JSON.stringify(productUrl)})">Enquire for Wholesale</button></div>
+        <div class="product-info">
+          <h3>${escapeHtml(product.title)}</h3>
+          <div class="product-price">${price}</div>
+          <p>${escapeHtml(description)}</p>
+          <div class="product-actions">
+            <button class="btn btn-outline" type="button" onclick="openProductDetails(${index})">View Details</button>
+            <button class="btn" type="button" onclick="enquireProductByIndex(${index})">WhatsApp Enquiry</button>
+          </div>
+        </div>
       </article>`;
     }).join("");
   } catch (error) {
@@ -400,6 +480,83 @@ function escapeHtml(value) {
 }
 function escapeAttribute(value) { return escapeHtml(value); }
 function stripHtml(value) { const element = document.createElement("div"); element.innerHTML = value; return element.textContent || element.innerText || ""; }
+
+function getProductUrl(product) {
+  return `https://${SHOP_DOMAIN}/products/${encodeURIComponent(product.handle)}`;
+}
+function enquireProductByIndex(index) {
+  const product = window.seharBanoProducts?.[index];
+  if (!product) return;
+  const url = getProductUrl(product);
+  const price = formatShopifyPrice(product);
+  const message = `Assalam-o-Alaikum Sehar Bano Wholesale Team.\nI am interested in: ${product.title}\nDisplayed price: ${price}\nPlease share wholesale price, minimum order quantity, available sizes, stock and delivery details.\nProduct link: ${url}`;
+  window.open(whatsappLink(message), "_blank", "noopener");
+}
+function openProductDetails(index) {
+  const product = window.seharBanoProducts?.[index];
+  if (!product) return;
+  const modal = document.getElementById("productModal");
+  const imageHost = document.getElementById("productModalImage");
+  const images = product.images?.nodes?.length ? product.images.nodes : (product.featuredImage ? [product.featuredImage] : []);
+  const videos = (product.media?.nodes || []).filter(item => item.mediaContentType === "VIDEO").flatMap(item => (item.sources || []).filter(source => source.url && (!source.mimeType || source.mimeType.includes("mp4") || source.format === "mp4")).map(source => ({...source, preview: item.previewImage?.url || "", isVideo: true})));
+  const galleryItems = [...images.map(item => ({url:item.url, alt:item.altText || product.title, isVideo:false})), ...videos];
+  if (!galleryItems.length) galleryItems.push({url:"",alt:product.title,isVideo:false});
+  imageHost.innerHTML = `<div class="product-gallery-main" id="productGalleryMain"></div><div class="product-gallery-thumbs" id="productGalleryThumbs"></div>`;
+  window.seharBanoGalleryItems = galleryItems;
+  showProductGalleryItem(0);
+  document.getElementById("productModalTitle").textContent = product.title || "";
+  document.getElementById("productModalPrice").textContent = formatShopifyPrice(product);
+  document.getElementById("productModalDescription").textContent = stripHtml(product.description || "Contact our team for wholesale details, availability and order quantities.");
+  document.getElementById("productModalQty").value = "1";
+  document.getElementById("productSizeGuidePanel").classList.remove("open");
+  const variantHost = document.getElementById("productModalVariants");
+  const variants = product.variants?.nodes || [];
+  const optionValues = [...new Set(variants.flatMap(v => (v.selectedOptions || []).filter(o => /size/i.test(o.name)).map(o => o.value)))];
+  const sizes = optionValues.length ? optionValues : [...new Set(variants.map(v => v.title).filter(t => t && t !== "Default Title"))];
+  variantHost.innerHTML = sizes.length
+    ? `<div class="product-modal-kicker">Available Sizes / Options</div><div class="product-variant-list">${sizes.map(size => `<span class="product-variant-chip">${escapeHtml(size)}</span>`).join("")}</div>`
+    : '<p class="product-modal-description">Please ask our team to confirm available sizes.</p>';
+  document.getElementById("productSizeGuidePanel").textContent = sizes.length
+    ? `Available options for this design: ${sizes.join(", ")}. Exact garment measurements may vary by design; please contact our wholesale team for the measurement chart before ordering.`
+    : "No size options are published for this product yet. Please contact our wholesale team for the size chart and measurements.";
+  const shopifyLink = document.getElementById("productModalShopify");
+  shopifyLink.href = getProductUrl(product);
+  document.getElementById("productModalEnquire").onclick = () => {
+    const quantity = Math.max(1, Number(document.getElementById("productModalQty").value) || 1);
+    const message = `Assalam-o-Alaikum Sehar Bano Wholesale Team.\nI am interested in: ${product.title}\nDisplayed price: ${formatShopifyPrice(product)}\nRequired quantity: ${quantity}\nAvailable sizes/options: ${sizes.join(", ") || "Please confirm"}\nPlease share size guide, final wholesale quotation, MOQ, stock and delivery details.\nProduct link: ${getProductUrl(product)}`;
+    window.open(whatsappLink(message), "_blank", "noopener");
+  };
+  modal.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+function showProductGalleryItem(index) {
+  const items = window.seharBanoGalleryItems || [];
+  const item = items[index];
+  const main = document.getElementById("productGalleryMain");
+  const thumbs = document.getElementById("productGalleryThumbs");
+  if (!item || !main || !thumbs) return;
+  main.innerHTML = item.isVideo
+    ? `<video src="${escapeAttribute(item.url)}" ${item.preview ? `poster="${escapeAttribute(item.preview)}"` : ""} controls playsinline preload="metadata"></video>`
+    : item.url ? `<img src="${escapeAttribute(item.url)}" alt="${escapeAttribute(item.alt || "Sehar Bano product image")}" loading="eager">` : '<span>SEHAR BANO</span>';
+  thumbs.innerHTML = items.map((media, i) => `<button type="button" class="product-gallery-thumb ${i===index?"active":""} ${media.isVideo?"video-thumb":""}" onclick="showProductGalleryItem(${i})" aria-label="${media.isVideo?"Play product video":"View product image"}">${media.isVideo && media.preview ? `<img src="${escapeAttribute(media.preview)}" alt="Product video preview">` : media.isVideo ? '<span style="display:grid;place-items:center;height:100%;font-size:20px">▶</span>' : `<img src="${escapeAttribute(media.url)}" alt="${escapeAttribute(media.alt || "Product thumbnail")}">`}</button>`).join("");
+}
+function toggleProductSizeGuide(){
+  const panel=document.getElementById("productSizeGuidePanel");
+  if(panel) panel.classList.toggle("open");
+}
+function closeProductDetails() {
+  const modal = document.getElementById("productModal");
+  if (modal) modal.hidden = true;
+  document.body.style.overflow = "";
+}
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") closeProductDetails();
+});
+document.addEventListener("click", event => {
+  const modal = document.getElementById("productModal");
+  if (modal && event.target === modal) closeProductDetails();
+});
+
 
 // 3D interactions: pointer tilt on desktop, reveal on scroll, reduced-motion aware.
 (function(){
